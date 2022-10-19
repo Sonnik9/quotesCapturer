@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuotesCapturer</title>
+</head>
+<body>
+    <p class="arr"></p>
+    <p class="list"></p>
+
+    <script>    
+        let flag = false;        
+        let sizechecker = [];
+        let arrQuotes = [];
+        let setUnikId = new Set();               
+        let arrQuotesAll = [];
+
+        let convert = function convertorQuotes() {
+
+        let textArray = document.querySelector('.arr')
+        let textContainerr = document.querySelector('.list');
+        let unikIdArr = [];
+        let unikIdSet = new Set(); 
+        let arrResult = [];  
+
+        for (let i = 0; i < arrQuotesAll.length; i++) {
+           unikIdSet.add(arrQuotesAll[i]._id);
+    
+           if(i == arrQuotesAll.length-1) {
+             unikIdArr = Array.from(unikIdSet);
+            } 
+        }   
+        for (let i = 0; i < unikIdArr.length; i++) {
+            arrResult.push({text: '', author: ''})
+            for (let j = 0; j < arrQuotesAll.length; j++) {
+
+                if(unikIdArr[i] == arrQuotesAll[j]._id) {
+                   arrResult[i].text = arrQuotesAll[j].content;
+                   arrResult[i].author = arrQuotesAll[j].author;
+                    let element2 = `<p> цитата № (${i+1}) ${arrResult[i].text}</p>                          
+                          <p> автор: ${arrResult[i].author}</p>`;                        
+                          textContainerr.innerHTML += element2;
+                }
+            }
+        }
+        textArray.textContent = JSON.stringify(arrResult);
+        console.log((arrResult)); 
+        }   
+     
+        function genFollow() { 
+       
+            fetch('https://api.quotable.io/random')  
+                .then(response => {
+                    if (!response.ok) throw Error(response.statusText);
+                       return response.json();
+                })  
+                .then(data => {
+                    arrQuotesAll.push(data);
+                    setUnikId.add(data._id);
+                    sizechecker.push(setUnikId.size);           
+                    if(sizechecker[sizechecker.length-1] == sizechecker[sizechecker.length-5]) {
+                        return convert(), console.log(arrQuotesAll)                        
+                    }
+                    else 
+                        genFollow();         
+          
+            })  
+            .catch(error => console.log(error));
+        }   
+        genFollow();
+  
+    </script>
+    
+</body>
+</html>
