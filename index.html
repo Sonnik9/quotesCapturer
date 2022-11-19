@@ -7,7 +7,7 @@
     <title>QuotesCapturer</title>
 </head>
 <body>
-    <p class="arr"></p>
+    <p class="arr">Please waiting...</p>
     <p class="list"></p>
 
     <script>    
@@ -33,19 +33,20 @@
             } 
         }   
         for (let i = 0; i < unikIdArr.length; i++) {
-            arrResult.push({text: '', author: ''})
+            arrResult.push({text: '', author: '', id: ''})
             for (let j = 0; j < arrQuotesAll.length; j++) {
 
                 if(unikIdArr[i] == arrQuotesAll[j]._id) {
                    arrResult[i].text = arrQuotesAll[j].content;
                    arrResult[i].author = arrQuotesAll[j].author;
+                   arrResult[i].id = arrQuotesAll[j]._id;
                     let element2 = `<p> цитата № (${i+1}) ${arrResult[i].text}</p>                          
                           <p> автор: ${arrResult[i].author}</p>`;                        
                           textContainerr.innerHTML += element2;
                 }
             }
         }
-        textArray.textContent = JSON.stringify(arrResult);
+        textArray.textContent = JSON.stringify(arrResult) + ';';
         console.log((arrResult)); 
         }   
      
@@ -60,7 +61,7 @@
                     arrQuotesAll.push(data);
                     setUnikId.add(data._id);
                     sizechecker.push(setUnikId.size);           
-                    if(sizechecker[sizechecker.length-1] == sizechecker[sizechecker.length-5]) {
+                    if(sizechecker[sizechecker.length-1] == sizechecker[sizechecker.length-4]) {
                         return convert(), console.log(arrQuotesAll)                        
                     }
                     else 
